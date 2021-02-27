@@ -79,40 +79,5 @@ class PostControllerTest extends TestCase
             $this->assertDatabaseHas('posts', ['title' => 'nuevo']);
     }
 
-    public function test_delete()
-    {
-
-        $post = factory(Post::class)->create();
-        $user = factory(User::class)->create();
- 
-        $response = $this->actingAs($user, 'api')->json('DELETE', "/api/posts/$post->id");
-
-        $response->assertSee(null)
-            ->assertStatus(204); //Sin contenido
-
-            $this->assertDatabaseMissing('posts', ['id' => $post -> $id]);
-    }
-
-    public function test_index()
-    {
-        factory(Post::class, 5)->create();
-        $user = factory(User::class)->create();
- 
-        $response = $this->actingAs($user, 'api')->json('GET', 'api/posts');
-
-        $response->assertJsonStructure([
-            'data' => [
-                '*' => ['id', 'title', 'created_at', 'updated_at']
-            ]
-        ])->assertStatus(200); //OK
-    }
-
-    public function test_guest()
-    {
-        $this->json('GET',    '/api/posts')->assertStatus(401);
-        $this->json('POST',   '/api/posts')->assertStatus(401);
-        $this->json('GET',    '/api/posts/1000')->assertStatus(401);
-        $this->json('PUT',    '/api/posts/1000')->assertStatus(401);
-        $this->json('DELETE', '/api/posts')->assertStatus(401);
-    }
+   
 }
